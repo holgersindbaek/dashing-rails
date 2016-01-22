@@ -11,3 +11,21 @@
  *= require dashing
  *= require_tree .
  */
+
+@media screen and (max-width:768px) {
+  .gridster, .gridster ul {
+    width:100% !important;
+    position:static !important;
+  }
+  .gridster ul li {
+    width:100% !important;
+    position:relative !important;
+    top:0 !important;
+    left:0 !important;
+    overflow:hidden;
+    display:table;
+    height:300px;
+    margin: 8px 0px;
+
+  }
+}
