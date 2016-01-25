@@ -1527,6 +1527,9 @@ Rickshaw.Graph.Axis.Time = function(args) {
   this.ticksTreatment = args.ticksTreatment || 'plain';
   this.fixedTimeUnit = args.timeUnit;
   this.tzOffset = args.tzOffset || 0;
+  // console.log(args.graph);
+  // console.log("this.tzOffset:");
+  // console.log(this.tzOffset.element);
 
   var time = new Rickshaw.Fixtures.Time();
 
@@ -1576,6 +1579,7 @@ Rickshaw.Graph.Axis.Time = function(args) {
     this.elements = [];
 
     var offsets = this.tickOffsets();
+    var labelWidth = Math.ceil(self.graph.width / self.graph.stackedData[0].length);
 
     offsets.forEach( function(o, i) {
 
@@ -1583,8 +1587,8 @@ Rickshaw.Graph.Axis.Time = function(args) {
 
       // Add lower element
       var element = document.createElement('div');
-      element.style.left = self.graph.x(o.value + self.tzOffset) + 'px';
-      element.style.width = Math.ceil(self.graph.width / self.graph.stackedData[0].length) + 'px';
+      element.style.left = labelWidth * i + 'px';
+      element.style.width = labelWidth + 'px';
       element.classList.add('x_tick');
       element.classList.add(self.ticksTreatment);
 
@@ -1612,8 +1616,8 @@ Rickshaw.Graph.Axis.Time = function(args) {
         var prefix = $("#" + self.graph.element.id).data("prefix");
         var suffix = $("#" + self.graph.element.id).data("suffix");
         var upperElement = document.createElement('div');
-        upperElement.style.left = self.graph.x(o.value + self.tzOffset) + 'px';
-        upperElement.style.width = Math.ceil(self.graph.width / self.graph.stackedData[0].length) + 'px';
+        upperElement.style.left = labelWidth * i + 'px';
+        upperElement.style.width = labelWidth + 'px';
         upperElement.classList.add('upper_x_tick');
         upperElement.classList.add(self.ticksTreatment);
 
