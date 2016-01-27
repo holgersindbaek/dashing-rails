@@ -9,7 +9,6 @@ Dashing.on 'ready', ->
     Dashing.widget_margins = [0, 0]
     Dashing.widget_base_dimensions = [$(window).width(), 352]
     Dashing.numColumns = 1
-    console.log $(".gridster ul li").attr("data-sizex", 1)
 
   contentWidth = (Dashing.widget_base_dimensions[0] + Dashing.widget_margins[0] * 2) * Dashing.numColumns
 
@@ -23,3 +22,5 @@ Dashing.on 'ready', ->
         draggable:
           stop: Dashing.showGridsterInstructions
           start: -> Dashing.currentWidgetPositions = Dashing.getWidgetPositions()
+
+  $.get("/dashing/dashboards/run_jobs")

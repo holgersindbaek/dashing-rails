@@ -43,7 +43,8 @@ module Dashing
     end
 
     def redis
-      @redis ||= ::ConnectionPool::Wrapper.new(size: request_thread_count, timeout: redis_timeout) { new_redis_connection }
+      # p "redis"
+      @redis ||= ::ConnectionPool::Wrapper.new(size: request_thread_count, timeout: redis_timeout) { new_redis_connection}
     end
 
     def new_redis_connection

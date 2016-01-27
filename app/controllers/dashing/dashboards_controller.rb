@@ -13,6 +13,12 @@ module Dashing
       render file: dashboard_path(params[:name]), layout: Dashing.config.dashboard_layout_path
     end
 
+    # GROSS HACK
+    def run_jobs
+      Dashing.config.scheduler.jobs.last.call
+      render :nothing => true, :status => 200
+    end
+
     private
 
     def check_dashboard_name
