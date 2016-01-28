@@ -1625,9 +1625,10 @@ Rickshaw.Graph.Axis.Time = function(args) {
         title.classList.add('title');
         title.innerHTML = self.graph.stackedData[0][i].y;
         if (prefix !== undefined) {
-          title.innerHTML = prefix + self.graph.stackedData[0][i].y;
-        } else if (suffix !== undefined) {
-          title.innerHTML = self.graph.stackedData[0][i].y + suffix;
+          title.innerHTML = prefix + title.innerHTML;
+        }
+        if (suffix !== undefined) {
+          title.innerHTML = title.innerHTML + suffix;
         }
         upperElement.appendChild(title);
 
