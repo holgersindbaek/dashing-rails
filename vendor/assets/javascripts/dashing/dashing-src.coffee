@@ -1,5 +1,5 @@
 Batman.config.pathPrefix = '/'
-Batman.config.viewPrefix = '/dashing/widgets/'
+Batman.config.viewPrefix = '/metrics/widgets/'
 
 Batman.Filters.prettyNumber = (num) ->
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") unless isNaN(num)
@@ -94,7 +94,7 @@ Dashing.widgets = widgets = {}
 Dashing.lastEvents = lastEvents = {}
 Dashing.debugMode = false
 
-source = new EventSource('/dashing/events')
+source = new EventSource('/metrics/events')
 source.addEventListener 'open', (e) ->
   console.log("Connection opened", e)
 

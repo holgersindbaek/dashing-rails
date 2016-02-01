@@ -24,4 +24,4 @@ Dashing.on 'ready', ->
           stop: Dashing.showGridsterInstructions
           start: -> Dashing.currentWidgetPositions = Dashing.getWidgetPositions()
 
-  $.get("/dashing/dashboards/run_jobs")
+  $.get("/metrics/dashboards/run_jobs")
