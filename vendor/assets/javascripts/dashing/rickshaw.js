@@ -1592,24 +1592,49 @@ Rickshaw.Graph.Axis.Time = function(args) {
       element.classList.add('x_tick');
       element.classList.add(self.ticksTreatment);
 
-      // Get day of week
-      var d = new Date(o.value * 1000);
-      var weekday = new Array(7);
-      weekday[0]=  "Sun";
-      weekday[1] = "Mon";
-      weekday[2] = "Tue";
-      weekday[3] = "Wed";
-      weekday[4] = "Thu";
-      weekday[5] = "Fri";
-      weekday[6] = "Sat";
-
+      // Create title
       var title = document.createElement('div');
       title.classList.add('title');
-      title.innerHTML = weekday[d.getDay()];
       element.appendChild(title);
-
       self.graph.element.appendChild(element);
       self.elements.push(element);
+
+      // Find if monthly or weekly
+      var time_type = $("#" + self.graph.element.id).data("time");
+      console.log("time_type:");
+      console.log(time_type);
+
+      // Create time from value
+      var date = new Date(o.value * 1000);
+
+      // Get correct title
+      if (time_type == "month") {
+        console.log
+        var bottom_title_array = new Array(7);
+        bottom_title_array[0]=  "Jan";
+        bottom_title_array[1] = "Feb";
+        bottom_title_array[2] = "Mar";
+        bottom_title_array[3] = "Apr";
+        bottom_title_array[4] = "May";
+        bottom_title_array[5] = "Jun";
+        bottom_title_array[6] = "Jul";
+        bottom_title_array[7] = "Aug";
+        bottom_title_array[8] = "Sep";
+        bottom_title_array[9] = "Oct";
+        bottom_title_array[10] = "Nov";
+        bottom_title_array[11] = "Dec";
+        title.innerHTML = bottom_title_array[date.getMonth()];
+      } else {
+        var bottom_title_array = new Array(7);
+        bottom_title_array[0]=  "Sun";
+        bottom_title_array[1] = "Mon";
+        bottom_title_array[2] = "Tue";
+        bottom_title_array[3] = "Wed";
+        bottom_title_array[4] = "Thu";
+        bottom_title_array[5] = "Fri";
+        bottom_title_array[6] = "Sat";
+        title.innerHTML = bottom_title_array[date.getDay()];
+      }
 
       // Add upper element
       if(self.graph.stackedData[0][i]){
