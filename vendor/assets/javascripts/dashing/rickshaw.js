@@ -1601,15 +1601,12 @@ Rickshaw.Graph.Axis.Time = function(args) {
 
       // Find if monthly or weekly
       var time_type = $("#" + self.graph.element.id).data("time");
-      console.log("time_type:");
-      console.log(time_type);
 
       // Create time from value
       var date = new Date(o.value * 1000);
 
       // Get correct title
       if (time_type == "month") {
-        console.log
         var bottom_title_array = new Array(7);
         bottom_title_array[0]=  "Jan";
         bottom_title_array[1] = "Feb";
