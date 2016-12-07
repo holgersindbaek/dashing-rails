@@ -512,7 +512,6 @@ Rickshaw.Graph = function(args) {
   };
 
   this.render = function() {
-
     var stackedData = this.stackData();
     this.discoverRange();
 
@@ -528,6 +527,9 @@ Rickshaw.Graph = function(args) {
 
   this.stackData = function() {
 
+    // var data = this.series.active()
+    //   .map( function(d) { return d.data } )
+    //   .map( function(d) { console.log("d:"); console.log(d); return d.filter( function(d) { return this._slice(d) }, this ) }, this);
     var data = this.series.active()
       .map( function(d) { return d.data } )
       .map( function(d) { return d.filter( function(d) { return this._slice(d) }, this ) }, this);
@@ -1598,6 +1600,7 @@ Rickshaw.Graph.Axis.Time = function(args) {
       element.appendChild(title);
       self.graph.element.appendChild(element);
       self.elements.push(element);
+      // console.log(title);
 
       // Find if monthly or weekly
       var time_type = $("#" + self.graph.element.id).data("time");
@@ -1634,7 +1637,29 @@ Rickshaw.Graph.Axis.Time = function(args) {
       }
 
       // Add upper element
-      if(self.graph.stackedData[0][i]){
+      if (self.graph.stackedData[0][i] && self.graph.stackedData[1][i]) {
+        var prefix = $("#" + self.graph.element.id).data("prefix");
+        var suffix = $("#" + self.graph.element.id).data("suffix");
+        var upperElement = document.createElement('div');
+        upperElement.style.left = labelWidth * i + 'px';
+        upperElement.style.width = labelWidth + 'px';
+        upperElement.classList.add('upper_x_tick');
+        upperElement.classList.add(self.ticksTreatment);
+
+        var title = document.createElement('div');
+        title.classList.add('title');
+        title.innerHTML = self.graph.stackedData[0][i].y + self.graph.stackedData[1][i].y;
+        if (prefix !== undefined) {
+          title.innerHTML = prefix + title.innerHTML;
+        }
+        if (suffix !== undefined) {
+          title.innerHTML = title.innerHTML + suffix;
+        }
+        upperElement.appendChild(title);
+
+        self.graph.element.appendChild(upperElement);
+        self.elements.push(upperElement);
+      } else if (self.graph.stackedData[0][i]) {
         var prefix = $("#" + self.graph.element.id).data("prefix");
         var suffix = $("#" + self.graph.element.id).data("suffix");
         var upperElement = document.createElement('div');
@@ -3441,7 +3466,6 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
   },
 
   render: function(args) {
-
     args = args || {};
 
     var graph = this.graph;
@@ -3454,7 +3478,7 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
     var barXOffset = 0;
 
     var activeSeriesCount = series.filter( function(s) { return !s.disabled; } ).length;
-    var seriesBarWidth = this.unstack ? barWidth / activeSeriesCount : barWidth;
+    var seriesBarWidth = this.unstack ? Math.ceil(barWidth / activeSeriesCount) : barWidth;
 
     var transform = function(d) {
       // add a matrix transform for negative values
@@ -3462,7 +3486,7 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
       return "matrix(" + matrix.join(',') + ")";
     };
 
-    series.forEach( function(series) {
+    series.forEach( function(series, seriesIndex) {
 
       if (series.disabled) return;
 
@@ -3471,10 +3495,10 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
       var nodes = vis.selectAll("path")
         .data(series.stack.filter( function(d) { return d.y !== null } ))
         .enter().append("svg:rect")
-        .attr("x", function(d) { return parseInt(graph.x(d.x) + barXOffset) })
+        .attr("x", function(d) { return Math.ceil(graph.x(d.x) + barXOffset) })
         .attr("y", function(d) { return Math.ceil((graph.y(d.y0 + Math.abs(d.y))) * (d.y < 0 ? -1 : 1 )) })
         .attr("width", Math.ceil(seriesBarWidth))
-        .attr("height", function(d) { return parseInt(graph.y.magnitude(Math.abs(d.y))) })
+        .attr("height", function(d) { return seriesIndex == 1 ? Math.ceil(graph.y.magnitude(Math.abs(d.y))) : Math.ceil(graph.y.magnitude(Math.abs(d.y))) })
         .attr("transform", transform);
 
       Array.prototype.forEach.call(nodes[0], function(n) {
@@ -3634,7 +3658,6 @@ Rickshaw.Graph.Renderer.ScatterPlot = Rickshaw.Class.create( Rickshaw.Graph.Rend
   },
 
   render: function(args) {
-
     args = args || {};
 
     var graph = this.graph;
@@ -3674,7 +3697,6 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
   name: 'multi',
 
   initialize: function($super, args) {
-
     $super(args);
   },
 
@@ -3803,7 +3825,6 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
   },
 
   render: function() {
-
     this.graph.series.forEach( function(series) {
       if (!series.renderer) {
         throw new Error("Each series needs a renderer for graph 'multi' renderer");
